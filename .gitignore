@@ -2,4 +2,4 @@ __pycache__/
 *.pyc
 .cache/
 .backup/
-.claude/
+.claude/settings.local.json
