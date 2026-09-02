@@ -28,3 +28,10 @@ descriptions:
 
   # Manual bullet text that always wins over anything generated, keyed by PR URL.
   overrides: {}
+
+overleaf:
+  # From your project's URL: overleaf.com/project/<PROJECT_ID>. Only used with --sync-overleaf.
+  project_id: ""
+
+  # Filename inside the Overleaf project to overwrite (may differ from the local resume.tex).
+  target_filename: "resume.tex"
