@@ -31,7 +31,7 @@ descriptions:
 
 overleaf:
   # From your project's URL: overleaf.com/project/<PROJECT_ID>. Only used with --sync-overleaf.
-  project_id: ""
+  project_id: "REDACTED_OVERLEAF_PROJECT_ID"
 
   # Filename inside the Overleaf project to overwrite (may differ from the local resume.tex).
   target_filename: "resume.tex"
