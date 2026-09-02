@@ -59,6 +59,25 @@ python3 src/cli.py inject --sync-overleaf
 them. `inject` is idempotent: if nothing changed since the last run, it says so
 and does nothing.
 
+## Verifying it works
+
+```
+python3 -m pytest tests/ -v
+
+export GITHUB_TOKEN=ghp_...
+python3 src/cli.py fetch
+
+export GEMINI_API_KEY=...
+python3 src/cli.py rank --explain
+
+python3 src/cli.py inject --dry-run
+python3 src/cli.py inject
+python3 src/cli.py inject --sync-overleaf
+```
+
+The test suite and `inject --dry-run` need no tokens and change nothing on disk -
+run those two first if you just want a quick "did I break anything" check.
+
 ## Usage
 
 ```
