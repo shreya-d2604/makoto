@@ -23,6 +23,42 @@ Environment variables (never put these in `config.yaml`):
 Edit `config.yaml` for your GitHub username, ranking rubric, pinned/excluded PRs,
 manual description overrides, and (optionally) your Overleaf project ID.
 
+To avoid exporting the tokens every session, add them to your shell profile once
+(`~/.bashrc` for bash, `~/.zshrc` for zsh - check with `echo $SHELL`):
+
+```
+echo 'export GITHUB_TOKEN=your_token_here' >> ~/.zshrc
+echo 'export GEMINI_API_KEY=your_key_here' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Verify without ever printing the value: `echo -n "$GITHUB_TOKEN" | wc -c` should
+print a number greater than 0.
+
+## Typical workflow
+
+```
+# 1. Whenever you've merged new PRs, refresh the cache
+python3 src/cli.py fetch
+
+# 2. (optional) sanity-check the ranking before it lands in your resume
+python3 src/cli.py rank --explain
+
+# 3. (optional) preview the exact bullet text
+python3 src/cli.py describe
+
+# 4. write the bullets into resume.tex, compile-check, and commit
+python3 src/cli.py inject
+
+# 5. (optional) also push the update to Overleaf
+python3 src/cli.py inject --sync-overleaf
+```
+
+`fetch` + `inject` is the whole loop for routine use - `rank --explain` and
+`describe` are just there to sanity-check the model's picks before committing to
+them. `inject` is idempotent: if nothing changed since the last run, it says so
+and does nothing.
+
 ## Usage
 
 ```
