@@ -1,0 +1,30 @@
+# resume-pr-sync configuration
+# No secrets here. GITHUB_TOKEN and ANTHROPIC_API_KEY come from environment variables only.
+
+github:
+  username: shreya-d2604
+
+ranking:
+  # Bump this whenever you edit the rubric below to force re-judging.
+  rubric_version: "v1"
+
+  rubric: |
+    Rank by what a hiring engineer would find most impressive on a resume. Weigh: technical
+    depth of the problem solved; whether the change required understanding an unfamiliar
+    codebase; how widely used and well-known the project is; whether it fixed real behaviour
+    versus cosmetic or mechanical changes. A small fix to a subtle bug in a serious project
+    outranks a large mechanical change in an obscure one. Do not reward diff size on its own.
+
+  # PR URLs that always make the cut, filling slots from the top regardless of judgment.
+  pinned: []
+
+  # PR URLs to always skip entirely.
+  excluded: []
+
+descriptions:
+  # llm (default, generated alongside the ranking call) or template (deterministic, derived
+  # from the PR title). Template mode is used automatically when no ANTHROPIC_API_KEY is set.
+  mode: llm
+
+  # Manual bullet text that always wins over anything generated, keyed by PR URL.
+  overrides: {}
