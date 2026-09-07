@@ -23,7 +23,7 @@ ranking:
 
 descriptions:
   # llm (default, generated alongside the ranking call) or template (deterministic, derived
-  # from the PR title). Template mode is used automatically when no ANTHROPIC_API_KEY is set.
+  # from the PR title). Template mode is used automatically when no GEMINI_API_KEY is set.
   mode: llm
 
   # Manual bullet text that always wins over anything generated, keyed by PR URL.
