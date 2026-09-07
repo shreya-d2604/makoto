@@ -3,3 +3,6 @@ __pycache__/
 .cache/
 .backup/
 .claude/settings.local.json
+
+# Personal resume content - never committed to this shared repo. See README for setup.
+resume.tex

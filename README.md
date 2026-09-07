@@ -3,8 +3,8 @@
 Finds merged GitHub PRs, has an LLM judge which ones are most resume-worthy, and
 injects them as bullet points into `resume.tex`.
 
-`resume.tex` (in this repo) is the only source of truth. Overleaf is a mirror,
-written to last, and only if you pass `--sync-overleaf`.
+Your local `resume.tex` (gitignored - see below) is the only source of truth.
+Overleaf is a mirror, written to last, and only if you pass `--sync-overleaf`.
 
 ## Setup
 
@@ -35,6 +35,22 @@ source ~/.zshrc
 Verify without ever printing the value: `echo -n "$GITHUB_TOKEN" | wc -c` should
 print a number greater than 0.
 
+## Set up your own resume.tex
+
+`resume.tex` is gitignored and never committed to this repo - it's your personal
+resume, this repo is a shared tool. You need to create it yourself at the repo
+root, with these two marker lines on their own, wherever you want the PR bullets
+to appear:
+
+```latex
+% PR-SECTION-START
+% PR-SECTION-END
+```
+
+Anything between them gets fully replaced on each `inject` run; everything else
+in the file is left untouched. If you don't have a LaTeX resume yet,
+`tests/fixtures/sample_resume.tex` is a minimal example you can copy and build on.
+
 ## Typical workflow
 
 ```
@@ -47,7 +63,7 @@ python3 src/cli.py rank --explain
 # 3. (optional) preview the exact bullet text
 python3 src/cli.py describe
 
-# 4. write the bullets into resume.tex, compile-check, and commit
+# 4. write the bullets into resume.tex and compile-check it
 python3 src/cli.py inject
 
 # 5. (optional) also push the update to Overleaf
@@ -59,10 +75,6 @@ python3 src/cli.py inject --sync-overleaf
 them. `inject` is idempotent: if nothing changed since the last run, it says so
 and does nothing.
 
-
-The test suite and `inject --dry-run` need no tokens and change nothing on disk -
-run those two first if you just want a quick "did I break anything" check.
-
 ## Usage
 
 ```
@@ -71,21 +83,12 @@ python3 src/cli.py rank               # rank cached PRs, show the selected top o
 python3 src/cli.py rank --explain     # show the full ranking with reasons
 python3 src/cli.py rank --all         # show every merged PR found, chosen or not
 python3 src/cli.py describe           # preview the generated resume bullets
-python3 src/cli.py inject             # write bullets into resume.tex, compile-check, git commit
+python3 src/cli.py inject             # write bullets into resume.tex, compile-check, commit if tracked
 python3 src/cli.py inject --dry-run   # preview the LaTeX without touching disk
-python3 src/cli.py inject --sync-overleaf   # also mirror to Overleaf after committing
+python3 src/cli.py inject --sync-overleaf   # also mirror to Overleaf afterward
 ```
 
-`resume.tex` must contain these two marker lines, on their own, wherever you want
-the PR bullets to appear:
-
-```latex
-% PR-SECTION-START
-% PR-SECTION-END
-```
-
-Everything between them is fully replaced on each run; everything outside them is
-left untouched.
+See "Set up your own resume.tex" above for the marker format `inject` looks for.
 
 ## Overleaf sync
 
@@ -97,8 +100,8 @@ unofficial, it may break if Overleaf changes their internal web API.
 
 Before overwriting, it downloads the current Overleaf copy of the file to
 `.backup/` in case you need to recover something. If the sync fails for any
-reason, it's reported as a warning, not a fatal error - the committed local
-`resume.tex` is what matters, and you can always paste it into Overleaf by hand.
+reason, it's reported as a warning, not a fatal error - your local `resume.tex`
+is what matters, and you can always paste it into Overleaf by hand.
 
 Set `overleaf.project_id` in `config.yaml` first (from your project's URL:
 `overleaf.com/project/<PROJECT_ID>`).

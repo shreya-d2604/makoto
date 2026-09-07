@@ -209,6 +209,10 @@ def _is_git_repo() -> bool:
     return _run_git(["rev-parse", "--is-inside-work-tree"]).returncode == 0
 
 
+def _is_git_ignored(path: str) -> bool:
+    return _run_git(["check-ignore", "-q", path]).returncode == 0
+
+
 def _commit_resume(added: set[str], removed: set[str]) -> None:
     """Commit resume.tex, which the caller must have already `git add`-ed."""
     message_lines = ["Update resume PR bullets"]
@@ -276,21 +280,24 @@ def cmd_inject(args: argparse.Namespace) -> None:
 
     print(f"Wrote {len(lines)} bullet(s) to {RESUME_PATH} -- compiles cleanly.")
 
-    add_result = _run_git(["add", "resume.tex"])
-    if add_result.returncode != 0:
-        print(f"Error: git add failed: {add_result.stderr.strip()}", file=sys.stderr)
-        sys.exit(1)
-
-    # Nothing staged relative to HEAD (e.g. resume.tex already matched the last commit).
-    if _run_git(["diff", "--cached", "--quiet", "--", "resume.tex"]).returncode == 0:
-        print("resume.tex already matches the last commit; nothing to commit.")
+    if _is_git_ignored("resume.tex"):
+        print("resume.tex is gitignored (personal/local file) - skipping commit.")
     else:
-        try:
-            _commit_resume(added=new_urls - old_urls, removed=old_urls - new_urls)
-        except RuntimeError as exc:
-            print(f"Error: {exc}", file=sys.stderr)
+        add_result = _run_git(["add", "resume.tex"])
+        if add_result.returncode != 0:
+            print(f"Error: git add failed: {add_result.stderr.strip()}", file=sys.stderr)
             sys.exit(1)
-        print("Committed resume.tex.")
+
+        # Nothing staged relative to HEAD (e.g. resume.tex already matched the last commit).
+        if _run_git(["diff", "--cached", "--quiet", "--", "resume.tex"]).returncode == 0:
+            print("resume.tex already matches the last commit; nothing to commit.")
+        else:
+            try:
+                _commit_resume(added=new_urls - old_urls, removed=old_urls - new_urls)
+            except RuntimeError as exc:
+                print(f"Error: {exc}", file=sys.stderr)
+                sys.exit(1)
+            print("Committed resume.tex.")
 
     if args.sync_overleaf:
         _sync_overleaf(config)
