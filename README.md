@@ -1,4 +1,8 @@
-# resume-pr-sync
+# makoto
+
+*the code you're judged by*
+
+![makoto banner](assets/banner.png)
 
 Finds merged GitHub PRs, has an LLM judge which ones are most resume-worthy, and
 injects them as bullet points into `resume.tex`.
