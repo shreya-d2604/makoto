@@ -305,12 +305,15 @@ def cmd_inject(args: argparse.Namespace) -> None:
 
 def _sync_overleaf(config: dict) -> None:
     overleaf_cfg = config.get("overleaf", {})
-    project_id = overleaf_cfg.get("project_id", "")
+    # OVERLEAF_PROJECT_ID wins over config.yaml so the ID never has to be committed
+    # to a (possibly shared/public) repo.
+    project_id = os.environ.get("OVERLEAF_PROJECT_ID") or overleaf_cfg.get("project_id", "")
     target_filename = overleaf_cfg.get("target_filename", "resume.tex")
 
     if not project_id:
         print(
-            "Warning: --sync-overleaf was passed but overleaf.project_id is not set in config.yaml. Skipping.",
+            "Warning: --sync-overleaf was passed but no Overleaf project ID is set "
+            "(OVERLEAF_PROJECT_ID env var or overleaf.project_id in config.yaml). Skipping.",
             file=sys.stderr,
         )
         return

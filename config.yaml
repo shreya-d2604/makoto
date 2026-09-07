@@ -1,5 +1,5 @@
-# resume-pr-sync configuration
-# No secrets here. GITHUB_TOKEN and ANTHROPIC_API_KEY come from environment variables only.
+# makoto configuration
+# No secrets here. GITHUB_TOKEN and GEMINI_API_KEY come from environment variables only.
 
 github:
   username: shreya-d2604
@@ -31,7 +31,9 @@ descriptions:
 
 overleaf:
   # From your project's URL: overleaf.com/project/<PROJECT_ID>. Only used with --sync-overleaf.
-  project_id: "REDACTED_OVERLEAF_PROJECT_ID"
+  # Prefer the OVERLEAF_PROJECT_ID env var instead of setting this directly - this file may be
+  # committed to a shared/public repo, and the project ID identifies your specific document.
+  project_id: ""
 
   # Filename inside the Overleaf project to overwrite (may differ from the local resume.tex).
   target_filename: "resume.tex"

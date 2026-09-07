@@ -23,16 +23,18 @@ Environment variables (never put these in `config.yaml`):
   used for PR ranking and description generation. Without it, the tool falls back
   to a deterministic ranking (log-scaled repo stars, then recency) and template-based
   descriptions - it still works end to end, just without LLM judgment.
+- `OVERLEAF_PROJECT_ID` - only needed for `--sync-overleaf` (see below)
 
 Edit `config.yaml` for your GitHub username, ranking rubric, pinned/excluded PRs,
-manual description overrides, and (optionally) your Overleaf project ID.
+and manual description overrides.
 
-To avoid exporting the tokens every session, add them to your shell profile once
+To avoid exporting these every session, add them to your shell profile once
 (`~/.bashrc` for bash, `~/.zshrc` for zsh - check with `echo $SHELL`):
 
 ```
 echo 'export GITHUB_TOKEN=your_token_here' >> ~/.zshrc
 echo 'export GEMINI_API_KEY=your_key_here' >> ~/.zshrc
+echo 'export OVERLEAF_PROJECT_ID=your_project_id_here' >> ~/.zshrc
 source ~/.zshrc
 ```
 
@@ -107,8 +109,8 @@ Before overwriting, it downloads the current Overleaf copy of the file to
 reason, it's reported as a warning, not a fatal error - your local `resume.tex`
 is what matters, and you can always paste it into Overleaf by hand.
 
-Set `overleaf.project_id` in `config.yaml` first (from your project's URL:
-`overleaf.com/project/<PROJECT_ID>`).
+Requires `OVERLEAF_PROJECT_ID` to be set (see Setup above) - it's your project's
+URL: `overleaf.com/project/<PROJECT_ID>`.
 
 ## Tests
 
